@@ -11,9 +11,9 @@ import io.github.cottonmc.cotton.gui.widget.icon.ItemIcon;
 
 public class TabTestGui extends LightweightGuiDescription {
 	public TabTestGui() {
-		WTabPanel tabs = new WTabPanel();
-		tabs.add(new WKirbSprite(), builder -> builder.title(Text.literal("Kirb")));
-		tabs.add(new WLabel(Text.literal("just another tab")), builder -> builder.icon(new ItemIcon(Items.ANDESITE)));
+		WTabPanel tabs = new WTabPanel(14);
+		tabs.add(new WKirbSprite(), builder -> builder.title(Text.literal("Contacts")));
+		tabs.add(new WLabel(Text.literal("just another tab")), builder -> builder.title(Text.literal("Entreprises")));
 
 		tabs.setSize(7 * 18, 5 * 18);
 		setRootPanel(tabs);
