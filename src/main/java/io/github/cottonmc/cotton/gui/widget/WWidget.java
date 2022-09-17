@@ -10,6 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import io.github.cottonmc.cotton.gui.GuiDescription;
 import io.github.cottonmc.cotton.gui.impl.VisualLogger;
 import io.github.cottonmc.cotton.gui.widget.data.InputResult;
+import io.github.cottonmc.cotton.gui.widget.data.Insets;
 import io.github.cottonmc.cotton.gui.widget.data.ObservableProperty;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -71,6 +72,28 @@ public class WWidget {
 	public void setSize(int x, int y) {
 		this.width = x;
 		this.height = y;
+	}
+
+	/**
+	 * Expands this panel be at least as large as the widget.
+	 *
+	 * @param w the widget
+	 */
+	protected void expandToFit(WWidget w) {
+		expandToFit(w, Insets.NONE);
+	}
+
+	/**
+	 * Expands this panel be at least as large as the widget.
+	 *
+	 * @param w      the widget
+	 * @param insets the layout insets
+	 * @since 4.0.0
+	 */
+	protected void expandToFit(WWidget w, Insets insets) {
+		int pushRight = w.getX() + w.getWidth() + insets.right();
+		int pushDown =  w.getY() + w.getHeight() + insets.bottom();
+		this.setSize(Math.max(this.getWidth(), pushRight), Math.max(this.getHeight(), pushDown));
 	}
 
 	/**
