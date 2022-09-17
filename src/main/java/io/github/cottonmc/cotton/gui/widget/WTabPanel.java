@@ -40,7 +40,7 @@ import java.util.function.Consumer;
 public class WTabPanel extends WPanel {
 	private static final int TAB_PADDING = 4;
 	private static final int TAB_WIDTH = 28;
-	private static final int TAB_HEIGHT = 30;
+	private int TAB_HEIGHT = 30;
 	private static final int ICON_SIZE = 16;
 	private final WBox tabRibbon = new WBox(Axis.HORIZONTAL).setSpacing(1);
 	private final List<WTab> tabWidgets = new ArrayList<>();
@@ -50,6 +50,14 @@ public class WTabPanel extends WPanel {
 	 * Constructs a new tab panel.
 	 */
 	public WTabPanel() {
+		this(30);
+	}
+
+	/**
+	 * Constructs a new tab panel.
+	 */
+	public WTabPanel(int tabHeight) {
+		TAB_HEIGHT = tabHeight;
 		add(tabRibbon, 0, 0);
 		add(mainPanel, 0, TAB_HEIGHT);
 	}
@@ -75,6 +83,7 @@ public class WTabPanel extends WPanel {
 
 		tabWidgets.add(tabWidget);
 		tabRibbon.add(tabWidget, TAB_WIDTH, TAB_HEIGHT + TAB_PADDING);
+		tab.getWidget().expandToFit(mainPanel);
 		mainPanel.add(tab.getWidget());
 	}
 
@@ -94,6 +103,7 @@ public class WTabPanel extends WPanel {
 	public void setSize(int x, int y) {
 		super.setSize(x, y);
 		tabRibbon.setSize(x, TAB_HEIGHT);
+		mainPanel.setSize(x, y - TAB_HEIGHT);
 	}
 
 	@Environment(EnvType.CLIENT)
