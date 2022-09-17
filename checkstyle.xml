@@ -18,9 +18,9 @@
 		<module name="LeftCurly"/>
 		<module name="RightCurly"/>
 		<module name="GenericWhitespace"/>
-		<module name="NeedBraces">
+		<!-- <module name="NeedBraces">
 			<property name="allowSingleLineStatement" value="true"/>
-		</module>
+		</module> -->
 		<module name="RegexpSinglelineJava">
 			<property name="format" value="^\t* {4,}"/>
 			<property name="message" value="Indent must use tab characters"/>
