@@ -6,13 +6,11 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonElement;
-import blue.endless.jankson.JsonObject;
 import io.github.cottonmc.cotton.gui.impl.ScreenNetworkingImpl;
 import io.github.cottonmc.jankson.JanksonFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,16 +32,19 @@ public class LibGuiClient implements ClientModInitializer {
 
 	public static LibGuiConfig loadConfig() {
 		try {
-			Path file = FabricLoader.getInstance().getConfigDir().resolve("libgui.json5");
-			
-			if (Files.notExists(file)) saveConfig(new LibGuiConfig());
-			
-			JsonObject json;
-			try (InputStream in = Files.newInputStream(file)) {
-				json = jankson.load(in);
-			}
+			config = new LibGuiConfig();
+			config.darkMode = false;
 
-			config =  jankson.fromJson(json, LibGuiConfig.class);
+			// Path file = FabricLoader.getInstance().getConfigDir().resolve("libgui.json5");
+			
+			// if (Files.notExists(file)) saveConfig(new LibGuiConfig());
+			
+			// JsonObject json;
+			// try (InputStream in = Files.newInputStream(file)) {
+			// 	json = jankson.load(in);
+			// }
+
+			// config =  jankson.fromJson(json, LibGuiConfig.class);
 			
 			/*
 			JsonElement jsonElementNew = jankson.toJson(new LibGuiConfig());

@@ -17,6 +17,6 @@ public final class LibGui {
 	 * @return true if widgets should use dark theming, false otherwise
 	 */
 	public static boolean isDarkMode() {
-		return LibGuiClient.config.darkMode;
+		return LibGuiClient.config == null ? false : LibGuiClient.config.darkMode;
 	}
 }
