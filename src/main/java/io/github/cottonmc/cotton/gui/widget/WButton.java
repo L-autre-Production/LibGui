@@ -21,22 +21,26 @@ import io.github.cottonmc.cotton.gui.widget.icon.Icon;
 import org.jetbrains.annotations.Nullable;
 
 public class WButton extends WWidget {
-	private static final Identifier DARK_WIDGETS_LOCATION = new Identifier("libgui", "textures/widget/dark_widgets.png");
+	private static final Identifier DARK_WIDGETS_LOCATION = new Identifier("libgui",
+			"textures/widget/dark_widgets.png");
 
 	private Text label;
+	private Text tooltip;
 	protected int color = WLabel.DEFAULT_TEXT_COLOR;
 	protected int darkmodeColor = WLabel.DEFAULT_TEXT_COLOR;
 	private boolean enabled = true;
 	protected HorizontalAlignment alignment = HorizontalAlignment.CENTER;
-	
-	@Nullable private Runnable onClick;
-	@Nullable private Icon icon = null;
+
+	@Nullable
+	private Runnable onClick;
+	@Nullable
+	private Icon icon = null;
 
 	/**
 	 * Constructs a button with no label and no icon.
 	 */
 	public WButton() {
-		
+
 	}
 
 	/**
@@ -69,7 +73,7 @@ public class WButton extends WWidget {
 		this.icon = icon;
 		this.label = label;
 	}
-	
+
 	@Override
 	public boolean canResize() {
 		return true;
@@ -83,45 +87,52 @@ public class WButton extends WWidget {
 	@Environment(EnvType.CLIENT)
 	@Override
 	public void paint(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
-		boolean hovered = (mouseX>=0 && mouseY>=0 && mouseX<getWidth() && mouseY<getHeight());
-		int state = 1; //1=regular. 2=hovered. 0=disabled.
+		boolean hovered = (mouseX >= 0 && mouseY >= 0 && mouseX < getWidth() && mouseY < getHeight());
+		int state = 1; // 1=regular. 2=hovered. 0=disabled.
 		if (!enabled) {
 			state = 0;
 		} else if (hovered || isFocused()) {
 			state = 2;
 		}
-		
-		float px = 1/256f;
+
+		float px = 1 / 256f;
 		float buttonLeft = 0 * px;
-		float buttonTop = (46 + (state*20)) * px;
-		int halfWidth = getWidth()/2;
-		if (halfWidth>198) halfWidth=198;
-		float buttonWidth = halfWidth*px;
-		float buttonHeight = 20*px;
-		
-		float buttonEndLeft = (200-(getWidth()/2)) * px;
+		float buttonTop = (46 + (state * 20)) * px;
+		int halfWidth = getWidth() / 2;
+		if (halfWidth > 198) {
+			halfWidth = 198;
+		}
+		float buttonWidth = halfWidth * px;
+		float buttonHeight = 20 * px;
+
+		float buttonEndLeft = (200 - (getWidth() / 2)) * px;
 
 		Identifier texture = getTexture();
-		ScreenDrawing.texturedRect(matrices, x, y, getWidth()/2, 20, texture, buttonLeft, buttonTop, buttonLeft+buttonWidth, buttonTop+buttonHeight, 0xFFFFFFFF);
-		ScreenDrawing.texturedRect(matrices, x+(getWidth()/2), y, getWidth()/2, 20, texture, buttonEndLeft, buttonTop, 200*px, buttonTop+buttonHeight, 0xFFFFFFFF);
+		ScreenDrawing.texturedRect(matrices, x, y, getWidth() / 2, 20, texture, buttonLeft, buttonTop,
+				buttonLeft + buttonWidth, buttonTop + buttonHeight, 0xFFFFFFFF);
+		ScreenDrawing.texturedRect(matrices, x + (getWidth() / 2), y, getWidth() / 2, 20, texture, buttonEndLeft,
+				buttonTop, 200 * px, buttonTop + buttonHeight, 0xFFFFFFFF);
 
 		if (icon != null) {
 			icon.paint(matrices, x + 1, y + 1, 16);
 		}
-		
-		if (label!=null) {
+
+		if (label != null) {
 			int color = 0xE0E0E0;
 			if (!enabled) {
 				color = 0xA0A0A0;
-			} /*else if (hovered) {
-				color = 0xFFFFA0;
-			}*/
+			} /*
+				 * else if (hovered) {
+				 * color = 0xFFFFA0;
+				 * }
+				 */
 
 			int xOffset = (icon != null && alignment == HorizontalAlignment.LEFT) ? 18 : 0;
-			ScreenDrawing.drawStringWithShadow(matrices, label.asOrderedText(), alignment, x + xOffset, y + ((20 - 8) / 2), width, color); //LibGuiClient.config.darkMode ? darkmodeColor : color);
+			ScreenDrawing.drawStringWithShadow(matrices, label.asOrderedText(), alignment, x + xOffset,
+					y + ((20 - 8) / 2), width, color); // LibGuiClient.config.darkMode ? darkmodeColor : color);
 		}
 	}
-	
+
 	@Override
 	public void setSize(int x, int y) {
 		super.setSize(x, 20);
@@ -131,11 +142,14 @@ public class WButton extends WWidget {
 	@Override
 	public InputResult onClick(int x, int y, int button) {
 		super.onClick(x, y, button);
-		
-		if (enabled && isWithinBounds(x, y)) {
-			MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
-			if (onClick!=null) onClick.run();
+		if (enabled && isWithinBounds(x, y)) {
+			MinecraftClient.getInstance().getSoundManager()
+					.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+
+			if (onClick != null) {
+				onClick.run();
+			}
 			return InputResult.PROCESSED;
 		}
 
@@ -190,6 +204,11 @@ public class WButton extends WWidget {
 		return this;
 	}
 
+	public WButton setTooltip(Text tooltip) {
+		this.tooltip = tooltip;
+		return this;
+	}
+
 	public HorizontalAlignment getAlignment() {
 		return alignment;
 	}
@@ -239,5 +258,12 @@ public class WButton extends WWidget {
 	@Environment(EnvType.CLIENT)
 	static Identifier getTexture() {
 		return LibGui.isDarkMode() ? DARK_WIDGETS_LOCATION : ClickableWidget.WIDGETS_TEXTURE;
+	}
+
+	@Override
+	public void addTooltip(TooltipBuilder tooltip) {
+		if (this.tooltip != null) {
+			tooltip.add(this.tooltip);
+		}
 	}
 }
